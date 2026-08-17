@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { registerGSAP, gsap, ScrollTrigger } from "@/lib/motion";
+import { useState } from "react";
+import ProjectScene from "./ProjectScene";
 
 const PROJECTS = [
   {
@@ -10,7 +10,6 @@ const PROJECTS = [
     title: "AURA",
     subtitle: "Premium E-Commerce Experience",
     year: "2026",
-    layout: "centered",
     description:
       "A bespoke digital flagship for an avant-garde luxury horology maison. Engineered with fluid web transitions, custom micro-interactions, and an editorial product catalog.",
     deliverables: ["Creative Direction", "Next.js 16", "GSAP Motion", "Tailwind CSS"],
@@ -26,7 +25,6 @@ const PROJECTS = [
     title: "ECHOTIC",
     subtitle: "Immersive Concert & Live Stage Platform",
     year: "2025",
-    layout: "asymmetric",
     description:
       "Spatial ticketing platform integrating real-time 3D acoustic stage previews, dynamic acoustic frequency visualizers, and instant zero-latency checkout flows.",
     deliverables: ["Web Audio API", "Next.js", "Custom Canvas Shaders", "Lenis"],
@@ -42,7 +40,6 @@ const PROJECTS = [
     title: "OPTIK EZIA",
     subtitle: "Modern Optical Company & Atelier",
     year: "2025",
-    layout: "fullwidth",
     description:
       "An editorial digital flagship for an artisanal eyewear maison in Tokyo. Features virtual frame try-on previews, refractive lens simulations, and bespoke typographic layout.",
     deliverables: ["Brand Identity", "Next.js", "Algolia Search", "GSAP ScrollTrigger"],
@@ -55,81 +52,11 @@ const PROJECTS = [
 ];
 
 export default function SelectedWork() {
-  const containerRef = useRef(null);
   const [activeModal, setActiveModal] = useState(null);
-
-  useEffect(() => {
-    registerGSAP();
-
-    const ctx = gsap.context(() => {
-      const storyElements = document.querySelectorAll(".project-story");
-
-      storyElements.forEach((story) => {
-        const visual = story.querySelector(".project-story-visual");
-        const title = story.querySelector(".project-story-title");
-        const meta = story.querySelector(".project-story-meta");
-
-        if (visual) {
-          gsap.fromTo(
-            visual,
-            { scale: 0.93, clipPath: "inset(4% 4% 4% 4% round 16px)" },
-            {
-              scale: 1,
-              clipPath: "inset(0% 0% 0% 0% round 24px)",
-              ease: "none",
-              scrollTrigger: {
-                trigger: story,
-                start: "top 80%",
-                end: "top 25%",
-                scrub: 0.7,
-              },
-            }
-          );
-        }
-
-        if (title) {
-          gsap.fromTo(
-            title,
-            { y: 30, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: story,
-                start: "top 70%",
-              },
-            }
-          );
-        }
-
-        if (meta) {
-          gsap.fromTo(
-            meta,
-            { y: 20, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: story,
-                start: "top 65%",
-              },
-            }
-          );
-        }
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section
       id="work"
-      ref={containerRef}
       className="relative py-28 md:py-44 px-6 md:px-12 max-w-7xl mx-auto border-t border-[rgba(17,17,16,0.08)]"
     >
       {/* Section Header */}
@@ -147,125 +74,14 @@ export default function SelectedWork() {
         </p>
       </div>
 
-      {/* Full-Width Project Stories */}
-      <div className="flex flex-col gap-36 md:gap-52">
+      {/* Project Scenes */}
+      <div className="flex flex-col">
         {PROJECTS.map((project) => (
-          <article
+          <ProjectScene
             key={project.id}
-            className="project-story group relative flex flex-col"
-          >
-            {/* Story Header */}
-            <div className="project-story-title flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-6 border-b border-[rgba(17,17,16,0.08)] mb-8">
-              <div className="flex items-baseline gap-4 md:gap-6">
-                <span className="text-xs font-mono text-[#88857d]">
-                  {project.num}
-                </span>
-                <h3 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#111110]">
-                  {project.title}
-                </h3>
-                <span className="text-sm font-serif italic text-[#585650] hidden sm:inline">
-                  {project.subtitle}
-                </span>
-              </div>
-              <span className="text-xs font-mono text-[#88857d] uppercase tracking-widest">
-                {project.year}
-              </span>
-            </div>
-
-            {/* Massive Editorial Project Visual (80–90% Viewport Space) */}
-            <div
-              onClick={() => setActiveModal(project)}
-              data-cursor-text="VIEW"
-              className={`project-story-visual cursor-pointer relative w-full h-[420px] sm:h-[540px] md:h-[680px] rounded-3xl overflow-hidden ${project.theme.bg} shadow-2xl transition-transform duration-700 ease-out`}
-            >
-              {/* Internal Bespoke Artwork Composition */}
-              <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-between select-none">
-                <div className="flex items-center justify-between text-xs font-mono text-white/50 tracking-widest uppercase">
-                  <span>{project.title} &bull; STUDIO ARCHIVE</span>
-                  <span className="hidden sm:inline">PROD // DEPLOYED</span>
-                </div>
-
-                {/* Center Visual Persona */}
-                <div className="my-auto text-center relative flex flex-col items-center justify-center">
-                  {project.id === "aura" && (
-                    <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-mono tracking-[0.35em] text-white/40 mb-3 uppercase">
-                        Haute Horlogerie Maison
-                      </span>
-                      <h4 className="text-6xl sm:text-8xl md:text-9xl font-light tracking-[-0.05em] text-white group-hover:scale-105 transition-transform duration-700">
-                        AURA
-                      </h4>
-                      <div className="mt-4 flex items-center gap-4 text-xs font-mono text-white/60">
-                        <span>44MM CHRONOGRAPH</span>
-                        <span>&bull;</span>
-                        <span>TITANIUM CERAMIC</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {project.id === "echotic" && (
-                    <div className="flex flex-col items-center">
-                      <div className="flex gap-1.5 items-end h-14 mb-4">
-                        {[35, 60, 90, 45, 100, 55, 80, 95, 40, 70, 85].map((h, i) => (
-                          <span
-                            key={i}
-                            style={{ height: `${h}%` }}
-                            className="w-1.5 bg-white/40 rounded-full group-hover:bg-white/80 transition-colors"
-                          />
-                        ))}
-                      </div>
-                      <h4 className="text-6xl sm:text-8xl md:text-9xl font-light tracking-[-0.05em] text-white group-hover:scale-105 transition-transform duration-700">
-                        ECHOTIC
-                      </h4>
-                      <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 mt-3 uppercase">
-                        Spatial Acoustics & Live Concerts
-                      </span>
-                    </div>
-                  )}
-
-                  {project.id === "optik-ezia" && (
-                    <div className="flex flex-col items-center">
-                      <div className="w-20 h-9 border border-white/40 rounded-full mb-4 flex items-center justify-center">
-                        <div className="w-5 h-5 rounded-full border border-white/50" />
-                      </div>
-                      <h4 className="text-6xl sm:text-8xl md:text-9xl font-light tracking-[-0.05em] text-white group-hover:scale-105 transition-transform duration-700">
-                        OPTIK EZIA
-                      </h4>
-                      <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 mt-3 uppercase">
-                        Tokyo Atelier &bull; Precision Frames
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between text-xs font-mono text-white/60 pt-4 border-t border-white/10">
-                  <span>{project.metrics}</span>
-                  <span className="inline-flex items-center gap-2 text-white group-hover:translate-x-1 transition-transform">
-                    EXPLORE CASE STUDY &rarr;
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Metadata & Editorial Synopsis */}
-            <div className="project-story-meta grid grid-cols-1 md:grid-cols-12 gap-6 mt-8 items-start">
-              <div className="md:col-span-8">
-                <p className="text-base text-[#585650] leading-relaxed max-w-2xl">
-                  {project.description}
-                </p>
-              </div>
-              <div className="md:col-span-4 flex flex-wrap gap-2 md:justify-end">
-                {project.deliverables.map((item, i) => (
-                  <span
-                    key={i}
-                    className="text-[11px] font-mono text-[#585650] border border-[rgba(17,17,16,0.12)] px-2.5 py-1 rounded-md bg-[#f0eee6]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </article>
+            project={project}
+            onOpenModal={setActiveModal}
+          />
         ))}
       </div>
 

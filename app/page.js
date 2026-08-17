@@ -4,6 +4,7 @@ import CustomCursor from "@/components/CustomCursor";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
+import PortraitExperience from "@/components/PortraitExperience";
 import SelectedWork from "@/components/SelectedWork";
 import HorizontalShowcase from "@/components/HorizontalShowcase";
 import Capabilities from "@/components/Capabilities";
@@ -21,6 +22,7 @@ export default function Home() {
         <main className="relative z-10">
           <Hero />
           <Intro />
+          <PortraitExperience />
           <SelectedWork />
           <HorizontalShowcase />
           <Capabilities />
