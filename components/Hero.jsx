@@ -13,7 +13,7 @@ export default function Hero() {
   const ctaRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Generative Interactive Visual Canvas
+  // Signature Art-Directed Kinetic Visual: DESIGN × CODE × MOTION
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -40,46 +40,46 @@ export default function Hero() {
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Number of subtle harmonic wave ribbons
-    const ribbonsCount = 7;
+    // Harmonic multi-strand orbit composition
+    const strandCount = 6;
 
     const render = () => {
-      time += 0.008;
-      // Smooth lerp mouse
-      mouse.x += (mouse.targetX - mouse.x) * 0.05;
-      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+      time += 0.007;
+      mouse.x += (mouse.targetX - mouse.x) * 0.04;
+      mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
       ctx.clearRect(0, 0, width, height);
 
-      const centerX = width * 0.55;
-      const centerY = height * 0.5;
+      const centerX = width * 0.52;
+      const centerY = height * 0.48;
 
-      for (let i = 0; i < ribbonsCount; i++) {
-        const offset = i * 0.35;
-        const radius = Math.min(width, height) * (0.22 + i * 0.028);
+      for (let s = 0; s < strandCount; s++) {
+        const offset = s * 0.42;
+        const baseRadius = Math.min(width, height) * (0.2 + s * 0.032);
 
         ctx.beginPath();
-        const segments = 120;
+        const steps = 140;
 
-        for (let j = 0; j <= segments; j++) {
-          const angle = (j / segments) * Math.PI * 2;
-          // Harmonic wave distortion
-          const noise =
-            Math.sin(angle * 3 + time + offset) * 18 +
-            Math.cos(angle * 2 - time * 0.7) * 12 +
-            Math.sin(angle * 5 + time * 1.2) * 6;
+        for (let i = 0; i <= steps; i++) {
+          const angle = (i / steps) * Math.PI * 2;
 
-          // Subtle interaction with mouse
-          const dx = centerX + Math.cos(angle) * (radius + noise) - mouse.x;
-          const dy = centerY + Math.sin(angle) * (radius + noise) - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const mouseInfluence = Math.max(0, 1 - dist / (width * 0.45)) * 25;
+          // Mathematical waveform modulation
+          const wave1 = Math.sin(angle * 3 + time + offset) * 16;
+          const wave2 = Math.cos(angle * 2 - time * 0.8) * 10;
+          const wave3 = Math.sin(angle * 6 + time * 1.5) * 5;
 
-          const r = radius + noise + Math.sin(time * 2 + angle * 4) * mouseInfluence;
-          const x = centerX + Math.cos(angle) * r;
-          const y = centerY + Math.sin(angle) * r;
+          const px = centerX + Math.cos(angle) * (baseRadius + wave1 + wave2);
+          const py = centerY + Math.sin(angle) * (baseRadius + wave1 + wave2);
 
-          if (j === 0) {
+          // Subtle cursor magnetic dispersion
+          const dist = Math.hypot(px - mouse.x, py - mouse.y);
+          const magnetic = Math.max(0, 1 - dist / (width * 0.4)) * 22;
+
+          const radius = baseRadius + wave1 + wave2 + wave3 + Math.sin(time * 2 + angle * 3) * magnetic;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
+
+          if (i === 0) {
             ctx.moveTo(x, y);
           } else {
             ctx.lineTo(x, y);
@@ -87,15 +87,13 @@ export default function Hero() {
         }
 
         ctx.closePath();
-        // Delicate monochrome stroke styling
-        const alpha = 0.12 - i * 0.012;
-        ctx.strokeStyle = `rgba(18, 18, 18, ${Math.max(0.02, alpha)})`;
-        ctx.lineWidth = 1.2;
+        const strokeAlpha = Math.max(0.03, 0.14 - s * 0.018);
+        ctx.strokeStyle = `rgba(17, 17, 16, ${strokeAlpha})`;
+        ctx.lineWidth = 1.1;
         ctx.stroke();
 
-        // Subtle gradient wash on innermost loop
-        if (i === 0) {
-          ctx.fillStyle = "rgba(18, 18, 18, 0.015)";
+        if (s === 0) {
+          ctx.fillStyle = "rgba(17, 17, 16, 0.012)";
           ctx.fill();
         }
       }
@@ -112,45 +110,50 @@ export default function Hero() {
     };
   }, []);
 
-  // GSAP Choreographed Entrance
+  // Exact GSAP Choreographed Timing
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
+      // 0.4s Eyebrow
       tl.fromTo(
         eyebrowRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.3 }
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, delay: 0.4 }
       )
+        // 0.6s Headline lines reveal upward
         .fromTo(
           [headlineLine1Ref.current, headlineLine2Ref.current, headlineLine3Ref.current],
-          { yPercent: 120, opacity: 0 },
+          { yPercent: 110, opacity: 0 },
           {
             yPercent: 0,
             opacity: 1,
-            duration: 1.3,
-            stagger: 0.12,
+            duration: 1.2,
+            stagger: 0.1,
             ease: "power4.out",
           },
-          "-=0.7"
+          0.6
         )
+        // 0.9s Supporting text
         .fromTo(
           subtextRef.current,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1 },
-          "-=0.8"
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" },
+          0.9
         )
+        // 1.1s CTA
         .fromTo(
           ctaRef.current,
-          { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1 },
-          "-=0.8"
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+          1.1
         )
+        // 1.3s Hero visual subtle entrance
         .fromTo(
           canvasRef.current,
-          { opacity: 0, scale: 0.95 },
-          { opacity: 1, scale: 1, duration: 1.8, ease: "power2.out" },
-          "-=1.2"
+          { opacity: 0, scale: 0.96 },
+          { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" },
+          1.3
         );
     }, containerRef);
 
@@ -162,118 +165,78 @@ export default function Hero() {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToContact = () => {
-    const el = document.getElementById("contact");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[92vh] md:min-h-screen flex flex-col justify-between pt-32 md:pt-40 pb-16 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between pt-32 md:pt-40 pb-16 md:pb-24 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
     >
-      {/* Background Interactive Kinetic Canvas */}
+      {/* Signature Background Canvas Visual */}
       <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-end">
         <canvas
           ref={canvasRef}
-          className="w-full h-full md:w-[65%] md:h-[90%] opacity-0"
+          className="w-full h-full md:w-[60%] md:h-[88%] opacity-0"
         />
       </div>
 
-      {/* Top Eyebrow */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[rgba(18,18,18,0.08)] pb-6 mb-12 md:mb-16">
-        <div ref={eyebrowRef} className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-[#5e5c57]">
-          <span className="w-2 h-2 rounded-full bg-[#121212]" />
+      {/* Eyebrow */}
+      <div className="relative z-10">
+        <div
+          ref={eyebrowRef}
+          className="opacity-0 flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.25em] text-[#585650]"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#111110]" />
           <span>CREATIVE DEVELOPER / DIGITAL EXPERIENCES</span>
-        </div>
-        <div className="text-[11px] font-mono text-[#8c8982] uppercase tracking-wider hidden sm:block">
-          ENGINEERING &bull; MOTION &bull; DIRECTION
         </div>
       </div>
 
       {/* Main Massive Editorial Typography */}
-      <div className="relative z-10 my-auto">
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.75rem] font-medium tracking-[-0.04em] leading-[0.93] text-[#121212]">
+      <div className="relative z-10 my-auto py-8">
+        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
           <div className="overflow-hidden py-1">
             <span ref={headlineLine1Ref} className="block">
-              I BUILD DIGITAL
-            </span>
-          </div>
-          <div className="overflow-hidden py-1 flex flex-wrap items-baseline gap-x-4">
-            <span
-              ref={headlineLine2Ref}
-              className="block font-serif italic font-normal text-[#2a2926] tracking-[-0.02em]"
-            >
-              experiences
-            </span>
-            <span className="text-sm md:text-lg font-mono font-normal tracking-normal text-[#8c8982] border border-[rgba(18,18,18,0.12)] px-3 py-1 rounded-full align-middle hidden sm:inline-block">
-              EST. 2026
+              I BUILD
             </span>
           </div>
           <div className="overflow-hidden py-1">
-            <span ref={headlineLine3Ref} className="block text-[#121212]">
-              THAT MOVE.
+            <span
+              ref={headlineLine2Ref}
+              className="block font-serif italic font-normal text-[#2a2926] tracking-[-0.025em]"
+            >
+              digital
+            </span>
+          </div>
+          <div className="overflow-hidden py-1">
+            <span ref={headlineLine3Ref} className="block text-[#111110]">
+              EXPERIENCES.
             </span>
           </div>
         </h1>
       </div>
 
-      {/* Hero Bottom Narrative & CTAs */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end pt-12 md:pt-16 border-t border-[rgba(18,18,18,0.08)]">
-        <div className="md:col-span-6 lg:col-span-5">
+      {/* Bottom Editorial Composition: Max 2 Lines Text + Refined CTA */}
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end pt-10 border-t border-[rgba(17,17,16,0.08)]">
+        <div className="md:col-span-6 lg:col-span-7">
           <p
             ref={subtextRef}
-            className="text-base md:text-lg text-[#5e5c57] leading-relaxed font-normal"
+            className="opacity-0 text-base md:text-lg text-[#585650] leading-relaxed max-w-xl font-normal"
           >
-            Specialized in crafting tactile web architectures, fluid physics-based interactions, and editorial digital platforms where high-end design meets resilient engineering.
+            Crafting thoughtful digital products where editorial design, fluid motion, and frontend engineering meet.
           </p>
         </div>
 
         <div
           ref={ctaRef}
-          className="md:col-span-6 lg:col-span-7 flex flex-wrap items-center md:justify-end gap-4"
+          className="opacity-0 md:col-span-6 lg:col-span-5 flex md:justify-end"
         >
           <button
             onClick={scrollToWork}
             data-cursor-text="VIEW"
-            className="group relative inline-flex items-center gap-3 bg-[#121212] text-[#f9f8f6] px-7 py-4 rounded-full text-xs font-mono tracking-widest uppercase transition-all duration-300 hover:bg-[#2a2926] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            className="group inline-flex items-center gap-3 text-xs font-mono tracking-[0.2em] uppercase text-[#111110] hover:opacity-70 transition-opacity"
           >
             <span>VIEW SELECTED WORK</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#f9f8f6] group-hover:scale-150 transition-transform duration-300" />
-            <svg
-              className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={scrollToContact}
-            data-cursor-expand="true"
-            className="group inline-flex items-center gap-2 border border-[rgba(18,18,18,0.18)] bg-transparent text-[#121212] px-6 py-4 rounded-full text-xs font-mono tracking-widest uppercase transition-all duration-300 hover:border-[#121212] hover:bg-[#f2f0eb]"
-          >
-            <span>GET IN TOUCH</span>
-            <svg
-              className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
+            <span className="text-base group-hover:translate-x-1.5 transition-transform duration-300">
+              &rarr;
+            </span>
           </button>
         </div>
       </div>

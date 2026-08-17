@@ -1,15 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #f9f8f6;
-  --bg-secondary: #f2f0eb;
-  --bg-card: #eceae3;
-  --text-primary: #121212;
-  --text-secondary: #5e5c57;
-  --text-muted: #8c8982;
-  --border-subtle: rgba(18, 18, 18, 0.08);
-  --border-hover: rgba(18, 18, 18, 0.2);
-  --accent: #d85427;
+  --bg-primary: #f8f6f0;
+  --bg-secondary: #f0eee6;
+  --bg-card: #e9e6dd;
+  --text-primary: #111110;
+  --text-secondary: #585650;
+  --text-muted: #88857d;
+  --border-subtle: rgba(17, 17, 16, 0.08);
+  --border-hover: rgba(17, 17, 16, 0.22);
 }
 
 @theme inline {
@@ -20,19 +19,18 @@
   --color-muted-text: var(--text-muted);
   --color-secondary-text: var(--text-secondary);
   --color-subtle-border: var(--border-subtle);
-  --color-brand-accent: var(--accent);
   --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
   --font-serif: var(--font-serif), Georgia, serif;
 }
 
-/* Custom editorial selection */
+/* Editorial selection */
 ::selection {
-  background-color: #121212;
-  color: #f9f8f6;
+  background-color: #111110;
+  color: #f8f6f0;
 }
 
-/* Lenis Recommended CSS */
+/* Lenis Smooth Scroll Recommended CSS */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -54,36 +52,40 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* Smooth transitions & Typography Utilities */
-.editorial-title {
-  letter-spacing: -0.04em;
-  line-height: 0.92;
+/* Smooth transitions & Typography */
+.editorial-headline {
+  letter-spacing: -0.045em;
+  line-height: 0.9;
 }
 
-.subtle-line {
-  height: 1px;
-  background-color: var(--border-subtle);
+.editorial-subhead {
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
-.text-reveal-mask {
-  overflow: hidden;
-  display: block;
+/* Hide scrollbar for horizontal sections while maintaining scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Custom scrollbar */
+/* Custom delicate scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f9f8f6;
+  background: #f8f6f0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d1c9;
-  border-radius: 3px;
+  background: #d8d5cb;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b5b1a6;
+  background: #b8b5ab;
 }
