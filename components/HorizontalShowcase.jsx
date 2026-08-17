@@ -3,34 +3,33 @@
 import { useEffect, useRef } from "react";
 import { registerGSAP, gsap, ScrollTrigger } from "@/lib/motion";
 
-const HORIZONTAL_MODULES = [
+const HORIZONTAL_PROJECTS = [
   {
-    num: "04A",
-    title: "KINETIC ENGINE",
-    type: "GSAP 3 / Lenis / Canvas2D",
-    desc: "Physics-grounded animation orchestrations synchronized at 60fps across variable refresh displays.",
-    tag: "EXPERIMENTAL ARCHIVE",
+    num: "01",
+    name: "AURA",
+    category: "PREMIUM DIGITAL COMMERCE",
+    year: "2026",
+    synopsis: "Haute horlogerie digital flagship with micro-interactions and editorial catalog architecture.",
+    theme: "bg-[#161614]",
+    accent: "text-white",
   },
   {
-    num: "04B",
-    title: "EDITORIAL DESIGN SYSTEM",
-    type: "Tailwind 4 / Fluid Typography",
-    desc: "Harmonized typography tokens, mathematical spatial ratios, and asymmetric responsive grids.",
-    tag: "DESIGN SPECIFICATION",
+    num: "02",
+    name: "ECHOTIC",
+    category: "IMMERSIVE DIGITAL EXPERIENCE",
+    year: "2025",
+    synopsis: "Spatial acoustics ticketing platform with real-time frequency visualizers and zero-latency checkout.",
+    theme: "bg-[#1c1e22]",
+    accent: "text-[#96a0b5]",
   },
   {
-    num: "04C",
-    title: "SPATIAL AUDIO INTERFACE",
-    type: "Web Audio API / Visualizer",
-    desc: "Real-time frequency extraction and harmonic waveform distortion mapped directly to scroll velocity.",
-    tag: "ACOUSTIC LAB",
-  },
-  {
-    num: "04D",
-    title: "HEADLESS NEXT.JS PIPELINE",
-    type: "App Router / Server Actions",
-    desc: "Edge-cached data fetching with sub-second page loads and zero layout shift on hydration.",
-    tag: "CORE INFRASTRUCTURE",
+    num: "03",
+    name: "OPTIK EZIA",
+    category: "OPTICAL BRAND EXPERIENCE",
+    year: "2025",
+    synopsis: "Tokyo atelier eyewear maison featuring virtual try-on previews and bespoke typographic layout.",
+    theme: "bg-[#23211f]",
+    accent: "text-[#d4a373]",
   },
 ];
 
@@ -42,7 +41,6 @@ export default function HorizontalShowcase() {
     registerGSAP();
 
     const ctx = gsap.context(() => {
-      // Only pin horizontal on medium+ screens to keep mobile scroll pristine
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 768px)", () => {
@@ -72,14 +70,14 @@ export default function HorizontalShowcase() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#f0eee6] border-y border-[rgba(17,17,16,0.08)] py-20 md:py-0 md:h-screen md:flex md:items-center overflow-hidden"
+      className="relative bg-[#f0eee6] border-y border-[rgba(17,17,16,0.08)] py-24 md:py-0 md:h-screen md:flex md:items-center overflow-hidden"
     >
       <div className="w-full max-w-7xl mx-auto px-6 md:px-12 md:hidden mb-8">
         <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#88857d] mb-2">
-          LABORATORY & EXPERIMENTAL ARCHIVES
+          04 / PROJECT WORLD
         </div>
         <h3 className="text-2xl font-medium tracking-tight text-[#111110]">
-          EXPERIMENTAL MODULES
+          HORIZONTAL ARCHIVES
         </h3>
       </div>
 
@@ -91,48 +89,47 @@ export default function HorizontalShowcase() {
         <div className="hidden md:flex flex-col justify-between w-[380px] shrink-0 p-10 rounded-3xl bg-[#f8f6f0] border border-[rgba(17,17,16,0.08)]">
           <div>
             <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#88857d] mb-4">
-              03 / LABORATORY
+              04 / SEQUENCE
             </div>
             <h3 className="text-4xl font-medium tracking-tight text-[#111110] leading-none mb-4">
-              INTERACTIVE ARCHIVES
+              PROJECT HORIZON
             </h3>
             <p className="text-sm text-[#585650] leading-relaxed">
-              Exploratory prototypes, custom audio-visual experiments, and performance stress tests.
+              Continuous horizontal exploration of selected digital flagships and interactive architectures.
             </p>
           </div>
-          <div className="text-xs font-mono text-[#88857d] tracking-widest">
+          <div className="text-xs font-mono text-[#88857d] tracking-widest uppercase">
             SCROLL HORIZONTALLY &rarr;
           </div>
         </div>
 
-        {/* Horizontal Project Modules */}
-        {HORIZONTAL_MODULES.map((item) => (
+        {/* Project Sequence Cards */}
+        {HORIZONTAL_PROJECTS.map((item) => (
           <div
             key={item.num}
-            className="flex flex-col justify-between w-full md:w-[460px] h-[340px] md:h-[480px] shrink-0 p-8 md:p-12 rounded-3xl bg-[#161614] text-[#f8f6f0] shadow-xl group hover:border-white/20 border border-transparent transition-all duration-300 select-none"
+            data-cursor-text="VIEW"
+            className={`flex flex-col justify-between w-full md:w-[500px] h-[360px] md:h-[500px] shrink-0 p-8 md:p-12 rounded-3xl ${item.theme} text-[#f8f6f0] shadow-2xl transition-all duration-300 select-none`}
           >
-            <div className="flex items-center justify-between text-xs font-mono text-white/50 tracking-widest">
-              <span>{item.num}</span>
-              <span>{item.tag}</span>
+            <div className="flex items-center justify-between text-xs font-mono text-white/50 tracking-widest uppercase">
+              <span>{item.num} / ARCHIVE</span>
+              <span>{item.year}</span>
             </div>
 
             <div>
               <span className="text-[11px] font-mono text-white/60 uppercase tracking-widest block mb-2">
-                {item.type}
+                {item.category}
               </span>
-              <h4 className="text-2xl md:text-3xl font-medium tracking-tight text-white mb-3">
-                {item.title}
+              <h4 className="text-3xl md:text-5xl font-medium tracking-tight text-white mb-4">
+                {item.name}
               </h4>
-              <p className="text-sm text-white/70 leading-relaxed">
-                {item.desc}
+              <p className="text-sm text-white/70 leading-relaxed max-w-sm">
+                {item.synopsis}
               </p>
             </div>
 
             <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-white/50">
-              <span>STATUS: PRODUCTION</span>
-              <span className="text-white group-hover:translate-x-1 transition-transform">
-                ARCHIVE SPEC &nearr;
-              </span>
+              <span>EXPLORE CASE STUDY</span>
+              <span className="text-white">&rarr;</span>
             </div>
           </div>
         ))}
