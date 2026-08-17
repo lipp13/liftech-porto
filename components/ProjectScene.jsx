@@ -3,9 +3,10 @@
 import { useEffect, useRef } from "react";
 import { registerGSAP, gsap, ScrollTrigger } from "@/lib/motion";
 
-export default function ProjectScene({ project, onOpenModal }) {
+export default function ProjectScene({ project }) {
   const containerRef = useRef(null);
   const visualRef = useRef(null);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     registerGSAP();
@@ -14,7 +15,7 @@ export default function ProjectScene({ project, onOpenModal }) {
       const visual = visualRef.current;
       if (!visual) return;
 
-      // Scroll-driven scale & clip-path expand
+      // Cinematic scale and clip-path expand as user scrolls
       gsap.fromTo(
         visual,
         {
@@ -33,6 +34,22 @@ export default function ProjectScene({ project, onOpenModal }) {
           },
         }
       );
+
+      // Progressive content reveal
+      gsap.fromTo(
+        contentRef.current,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 50%",
+          },
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -41,19 +58,16 @@ export default function ProjectScene({ project, onOpenModal }) {
   return (
     <article
       ref={containerRef}
-      className="project-scene group relative flex flex-col mb-32 md:mb-48"
+      className="project-scene relative flex flex-col mb-36 md:mb-56"
     >
-      {/* Project Title Header */}
+      {/* Project Meta Line */}
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-6 border-b border-[rgba(17,17,16,0.08)] mb-8">
         <div className="flex items-baseline gap-4 md:gap-6">
           <span className="text-xs font-mono text-[#88857d]">
             {project.num}
           </span>
-          <h3 className="text-3xl sm:text-5xl md:text-6xl font-medium tracking-tight text-[#111110]">
-            {project.title}
-          </h3>
-          <span className="text-sm font-serif italic text-[#585650] hidden sm:inline">
-            {project.subtitle}
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#111110]">
+            {project.category}
           </span>
         </div>
         <span className="text-xs font-mono text-[#88857d] uppercase tracking-widest">
@@ -61,20 +75,19 @@ export default function ProjectScene({ project, onOpenModal }) {
         </span>
       </div>
 
-      {/* Massive Visual Display Container (80-90vw) */}
+      {/* Massive Visual Display Container (80-90% Viewport Space) */}
       <div
         ref={visualRef}
-        onClick={() => onOpenModal(project)}
         data-cursor-text="VIEW"
-        className={`cursor-pointer relative w-full h-[440px] sm:h-[560px] md:h-[700px] rounded-3xl overflow-hidden ${project.theme.bg} shadow-2xl transition-transform duration-700 ease-out will-change-transform`}
+        className={`relative w-full h-[460px] sm:h-[580px] md:h-[720px] rounded-3xl overflow-hidden ${project.theme.bg} shadow-2xl transition-transform duration-700 ease-out will-change-transform`}
       >
         <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-between select-none">
           <div className="flex items-center justify-between text-xs font-mono text-white/50 tracking-widest uppercase">
-            <span>{project.title} &bull; STUDIO ARCHIVE</span>
-            <span className="hidden sm:inline">PROD // DEPLOYED</span>
+            <span>{project.title}</span>
+            <span className="hidden sm:inline">COMMERCIAL COMMISSIONS</span>
           </div>
 
-          {/* Center Visual Art */}
+          {/* Project-Specific Visual Composition */}
           <div className="my-auto text-center relative flex flex-col items-center justify-center">
             {project.id === "aura" && (
               <div className="flex flex-col items-center">
@@ -128,17 +141,21 @@ export default function ProjectScene({ project, onOpenModal }) {
           </div>
 
           <div className="flex items-center justify-between text-xs font-mono text-white/60 pt-4 border-t border-white/10">
-            <span>{project.metrics}</span>
-            <span className="inline-flex items-center gap-2 text-white group-hover:translate-x-1 transition-transform">
-              EXPLORE CASE STUDY &rarr;
-            </span>
+            <span>{project.subtitle}</span>
+            <span className="text-white">SELECTED ARCHIVE</span>
           </div>
         </div>
       </div>
 
-      {/* Metadata & Synopsis */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-8 items-start">
+      {/* Progressive Narrative & Technical Scope (Zero Fake Metrics) */}
+      <div
+        ref={contentRef}
+        className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 items-start"
+      >
         <div className="md:col-span-8">
+          <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-[#111110] mb-2">
+            {project.title}
+          </h3>
           <p className="text-base text-[#585650] leading-relaxed max-w-2xl">
             {project.description}
           </p>

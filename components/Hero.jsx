@@ -1,159 +1,123 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import Image from "next/image";
+import { registerGSAP, gsap, ScrollTrigger } from "@/lib/motion";
+import DepthScene from "./DepthScene";
 
 export default function Hero() {
   const containerRef = useRef(null);
-  const headlineLine1Ref = useRef(null);
-  const headlineLine2Ref = useRef(null);
-  const headlineLine3Ref = useRef(null);
+  const headlineRef = useRef(null);
+  const portraitWrapperRef = useRef(null);
+  const portraitImageRef = useRef(null);
   const eyebrowRef = useRef(null);
   const subtextRef = useRef(null);
-  const ctaRef = useRef(null);
-  const canvasRef = useRef(null);
 
-  // Signature Art-Directed Kinetic Visual: DESIGN × CODE × MOTION
+  // Desktop subtle mouse tilt for 2.5D depth
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let animationFrameId;
-    let width = (canvas.width = canvas.offsetWidth * window.devicePixelRatio);
-    let height = (canvas.height = canvas.offsetHeight * window.devicePixelRatio);
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    let mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2 };
-    let time = 0;
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      height = canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-    };
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let rafId;
 
     const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.targetX = (e.clientX - rect.left) * window.devicePixelRatio;
-      mouse.targetY = (e.clientY - rect.top) * window.devicePixelRatio;
+      const { innerWidth, innerHeight } = window;
+      targetX = (e.clientX / innerWidth - 0.5) * 14;
+      targetY = (e.clientY / innerHeight - 0.5) * 14;
     };
 
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
+    const updateParallax = () => {
+      currentX += (targetX - currentX) * 0.05;
+      currentY += (targetY - currentY) * 0.05;
 
-    // Harmonic multi-strand orbit composition
-    const strandCount = 6;
-
-    const render = () => {
-      time += 0.007;
-      mouse.x += (mouse.targetX - mouse.x) * 0.04;
-      mouse.y += (mouse.targetY - mouse.y) * 0.04;
-
-      ctx.clearRect(0, 0, width, height);
-
-      const centerX = width * 0.52;
-      const centerY = height * 0.48;
-
-      for (let s = 0; s < strandCount; s++) {
-        const offset = s * 0.42;
-        const baseRadius = Math.min(width, height) * (0.2 + s * 0.032);
-
-        ctx.beginPath();
-        const steps = 140;
-
-        for (let i = 0; i <= steps; i++) {
-          const angle = (i / steps) * Math.PI * 2;
-
-          // Mathematical waveform modulation
-          const wave1 = Math.sin(angle * 3 + time + offset) * 16;
-          const wave2 = Math.cos(angle * 2 - time * 0.8) * 10;
-          const wave3 = Math.sin(angle * 6 + time * 1.5) * 5;
-
-          const px = centerX + Math.cos(angle) * (baseRadius + wave1 + wave2);
-          const py = centerY + Math.sin(angle) * (baseRadius + wave1 + wave2);
-
-          // Subtle cursor magnetic dispersion
-          const dist = Math.hypot(px - mouse.x, py - mouse.y);
-          const magnetic = Math.max(0, 1 - dist / (width * 0.4)) * 22;
-
-          const radius = baseRadius + wave1 + wave2 + wave3 + Math.sin(time * 2 + angle * 3) * magnetic;
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
-
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-
-        ctx.closePath();
-        const strokeAlpha = Math.max(0.03, 0.14 - s * 0.018);
-        ctx.strokeStyle = `rgba(17, 17, 16, ${strokeAlpha})`;
-        ctx.lineWidth = 1.1;
-        ctx.stroke();
-
-        if (s === 0) {
-          ctx.fillStyle = "rgba(17, 17, 16, 0.012)";
-          ctx.fill();
-        }
+      if (portraitImageRef.current) {
+        portraitImageRef.current.style.transform = `translate3d(${currentX * 0.4}px, ${currentY * 0.4}px, 0) scale(1.03)`;
       }
 
-      animationFrameId = requestAnimationFrame(render);
+      rafId = requestAnimationFrame(updateParallax);
     };
 
-    render();
+    window.addEventListener("mousemove", handleMouseMove);
+    rafId = requestAnimationFrame(updateParallax);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
-  // Exact GSAP Choreographed Timing
+  // GSAP Choreographed Scroll Transformation
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+    registerGSAP();
 
-      // 0.4s Eyebrow
-      tl.fromTo(
-        eyebrowRef.current,
-        { y: 15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, delay: 0.4 }
-      )
-        // 0.6s Headline lines reveal upward
+    const ctx = gsap.context(() => {
+      // Entrance Timeline
+      const enterTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+      enterTl
         .fromTo(
-          [headlineLine1Ref.current, headlineLine2Ref.current, headlineLine3Ref.current],
+          eyebrowRef.current,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, delay: 0.3 }
+        )
+        .fromTo(
+          ".hero-line",
           { yPercent: 110, opacity: 0 },
           {
             yPercent: 0,
             opacity: 1,
             duration: 1.2,
             stagger: 0.1,
-            ease: "power4.out",
           },
-          0.6
+          0.5
         )
-        // 0.9s Supporting text
         .fromTo(
           subtextRef.current,
           { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" },
-          0.9
+          { y: 0, opacity: 1, duration: 0.9 },
+          0.8
         )
-        // 1.1s CTA
         .fromTo(
-          ctaRef.current,
-          { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-          1.1
-        )
-        // 1.3s Hero visual subtle entrance
-        .fromTo(
-          canvasRef.current,
-          { opacity: 0, scale: 0.96 },
-          { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" },
-          1.3
+          portraitWrapperRef.current,
+          { scale: 0.92, opacity: 0, clipPath: "inset(6% 6% 6% 6% round 24px)" },
+          {
+            scale: 1,
+            opacity: 1,
+            clipPath: "inset(0% 0% 0% 0% round 32px)",
+            duration: 1.4,
+            ease: "power3.out",
+          },
+          0.6
+        );
+
+      // Scroll-Driven Transformation: Typography moves up, Portrait expands into depth
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      });
+
+      scrollTl
+        .to(headlineRef.current, {
+          y: -120,
+          opacity: 0.2,
+          ease: "none",
+        })
+        .to(
+          portraitWrapperRef.current,
+          {
+            scale: 1.06,
+            y: 40,
+            ease: "none",
+          },
+          0
         );
     }, containerRef);
 
@@ -168,76 +132,105 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col justify-between pt-32 md:pt-40 pb-16 md:pb-24 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
+      className="relative min-h-[105vh] flex flex-col justify-between pt-28 md:pt-36 pb-20 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
     >
-      {/* Signature Background Canvas Visual */}
-      <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-end">
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full md:w-[60%] md:h-[88%] opacity-0"
-        />
-      </div>
+      {/* 3D Architectural Scene */}
+      <DepthScene />
 
-      {/* Eyebrow */}
+      {/* Top Label */}
       <div className="relative z-10">
         <div
           ref={eyebrowRef}
           className="opacity-0 flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.25em] text-[#585650]"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#111110]" />
-          <span>CREATIVE DEVELOPER / DIGITAL EXPERIENCES</span>
+          <span>CREATIVE DEVELOPER</span>
         </div>
       </div>
 
-      {/* Main Massive Editorial Typography */}
-      <div className="relative z-10 my-auto py-8">
-        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
-          <div className="overflow-hidden py-1">
-            <span ref={headlineLine1Ref} className="block">
-              I BUILD
-            </span>
-          </div>
-          <div className="overflow-hidden py-1">
-            <span
-              ref={headlineLine2Ref}
-              className="block font-serif italic font-normal text-[#2a2926] tracking-[-0.025em]"
-            >
-              digital
-            </span>
-          </div>
-          <div className="overflow-hidden py-1">
-            <span ref={headlineLine3Ref} className="block text-[#111110]">
-              EXPERIENCES.
-            </span>
-          </div>
-        </h1>
-      </div>
+      {/* Main Massive Editorial Typography & 60-70% Dominant Visual Layout */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center my-auto py-6">
+        {/* Left Column: Huge Typography */}
+        <div ref={headlineRef} className="lg:col-span-6 flex flex-col justify-center">
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
+            <div className="overflow-hidden py-1">
+              <span className="hero-line block">I BUILD</span>
+            </div>
+            <div className="overflow-hidden py-1">
+              <span className="hero-line block font-serif italic font-normal text-[#2a2926] tracking-[-0.025em]">
+                digital
+              </span>
+            </div>
+            <div className="overflow-hidden py-1">
+              <span className="hero-line block text-[#111110]">
+                EXPERIENCES.
+              </span>
+            </div>
+          </h1>
 
-      {/* Bottom Editorial Composition: Max 2 Lines Text + Refined CTA */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-end pt-10 border-t border-[rgba(17,17,16,0.08)]">
-        <div className="md:col-span-6 lg:col-span-7">
           <p
             ref={subtextRef}
-            className="opacity-0 text-base md:text-lg text-[#585650] leading-relaxed max-w-xl font-normal"
+            className="opacity-0 text-base md:text-lg text-[#585650] leading-relaxed max-w-md mt-8 font-normal"
           >
-            Crafting thoughtful digital products where editorial design, fluid motion, and frontend engineering meet.
+            Crafting digital products where editorial design, fluid motion, and frontend engineering meet.
           </p>
+
+          <div className="mt-8">
+            <button
+              onClick={scrollToWork}
+              data-cursor-text="VIEW"
+              className="group inline-flex items-center gap-3 text-xs font-mono tracking-[0.2em] uppercase text-[#111110] hover:opacity-70 transition-opacity"
+            >
+              <span>VIEW SELECTED WORK</span>
+              <span className="text-base group-hover:translate-x-1.5 transition-transform duration-300">
+                &rarr;
+              </span>
+            </button>
+          </div>
         </div>
 
-        <div
-          ref={ctaRef}
-          className="opacity-0 md:col-span-6 lg:col-span-5 flex md:justify-end"
-        >
-          <button
-            onClick={scrollToWork}
-            data-cursor-text="VIEW"
-            className="group inline-flex items-center gap-3 text-xs font-mono tracking-[0.2em] uppercase text-[#111110] hover:opacity-70 transition-opacity"
+        {/* Right Column: Dominant 2.5D Portrait Art Installation (60-70% Viewport Area) */}
+        <div className="lg:col-span-6 flex justify-center lg:justify-end">
+          <div
+            ref={portraitWrapperRef}
+            data-cursor-text="EXPLORE"
+            className="relative w-full max-w-md sm:max-w-lg aspect-[3/4] sm:aspect-[4/5] rounded-3xl overflow-hidden bg-[#161614] shadow-2xl border border-[rgba(17,17,16,0.12)] select-none will-change-transform"
           >
-            <span>VIEW SELECTED WORK</span>
-            <span className="text-base group-hover:translate-x-1.5 transition-transform duration-300">
-              &rarr;
-            </span>
-          </button>
+            {/* Background Ambient Radial Shadow */}
+            <div className="absolute inset-0 bg-radial from-[#383733]/30 via-transparent to-[#111110]/90 pointer-events-none z-10" />
+
+            {/* Authentic Photographic Portrait */}
+            <div
+              ref={portraitImageRef}
+              className="absolute inset-0 w-full h-full will-change-transform transition-transform duration-300"
+            >
+              <Image
+                src="/images/alif-portrait.jpg"
+                alt="Alif Alfathar — Creative Developer"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 540px"
+                className="object-cover object-center grayscale-[20%] contrast-[1.08] brightness-[0.95] hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111110] via-transparent to-[#111110]/30 opacity-70" />
+            </div>
+
+            {/* Overlay Metadata */}
+            <div className="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none z-20">
+              <div className="flex items-center justify-between text-xs font-mono text-white/60 tracking-widest uppercase">
+                <span>ALIF ALFATHAR</span>
+                <span>INDONESIA</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-mono tracking-[0.3em] text-white/50 uppercase block mb-1">
+                  PORTFOLIO ARCHIVE
+                </span>
+                <span className="text-xl sm:text-2xl font-medium tracking-tight text-white block">
+                  DESIGN × CODE × MOTION
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

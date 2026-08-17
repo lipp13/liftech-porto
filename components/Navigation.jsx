@@ -11,14 +11,13 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 40);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Entrance animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -30,7 +29,6 @@ export default function Navigation() {
     return () => ctx.revert();
   }, []);
 
-  // Mobile menu transition
   useEffect(() => {
     if (mobileMenuRef.current) {
       if (mobileMenuOpen) {
@@ -82,7 +80,6 @@ export default function Navigation() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Brandmark */}
           <a
             href="#"
             className="text-sm md:text-base font-medium tracking-tight text-[#111110] select-none"
@@ -91,7 +88,6 @@ export default function Navigation() {
             LIFTECH
           </a>
 
-          {/* Minimal Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-10 text-[11px] font-mono tracking-[0.2em] text-[#111110] uppercase">
             {[
               { label: "WORK", href: "work" },
@@ -110,7 +106,6 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-[11px] font-mono tracking-widest text-[#111110] uppercase py-1"
@@ -121,7 +116,6 @@ export default function Navigation() {
         </div>
       </header>
 
-      {/* Fullscreen Editorial Mobile Menu */}
       <div
         ref={mobileMenuRef}
         className="fixed inset-0 bg-[#f8f6f0] z-30 flex flex-col justify-between p-8 pt-32 md:hidden -translate-y-full"
@@ -147,7 +141,7 @@ export default function Navigation() {
 
         <div className="pt-8 border-t border-[rgba(17,17,16,0.08)] flex flex-col gap-2 text-xs font-mono text-[#585650]">
           <div>ALIF ALFATHAR &bull; CREATIVE DEVELOPER</div>
-          <div className="text-[11px] text-[#88857d]">AVAILABLE WORLDWIDE</div>
+          <div className="text-[11px] text-[#88857d]">INDONESIA &bull; 2026</div>
         </div>
       </div>
     </>

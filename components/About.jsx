@@ -11,7 +11,7 @@ export default function About() {
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".about-text",
+        ".about-reveal",
         { y: 30, opacity: 0 },
         {
           y: 0,
@@ -34,16 +34,14 @@ export default function About() {
     <section
       id="about"
       ref={containerRef}
-      className="relative py-28 md:py-44 px-6 md:px-12 max-w-7xl mx-auto border-t border-[rgba(17,17,16,0.08)]"
+      className="relative py-32 md:py-48 px-6 md:px-12 max-w-7xl mx-auto border-t border-[rgba(17,17,16,0.08)]"
     >
-      {/* Category Marker */}
       <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#88857d] mb-16">
-        05 / ABOUT
+        06 / ABOUT
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-        {/* Left Column: Personal Identity & Name */}
-        <div className="lg:col-span-5 about-text">
+        <div className="lg:col-span-5 about-reveal">
           <span className="text-xs font-mono text-[#88857d] uppercase tracking-widest block mb-2">
             CREATIVE DEVELOPER
           </span>
@@ -55,8 +53,7 @@ export default function About() {
           </p>
         </div>
 
-        {/* Right Column: Narrative */}
-        <div className="lg:col-span-7 flex flex-col gap-6 text-lg sm:text-xl text-[#33322d] leading-relaxed about-text font-normal">
+        <div className="lg:col-span-7 flex flex-col gap-6 text-lg sm:text-xl text-[#33322d] leading-relaxed about-reveal font-normal">
           <p>
             Creative developer from Indonesia. I build digital experiences combining frontend engineering, visual design, and motion.
           </p>
@@ -66,7 +63,7 @@ export default function About() {
 
           <div className="pt-6 border-t border-[rgba(17,17,16,0.08)] flex flex-wrap items-center gap-8 text-xs font-mono text-[#585650]">
             <div>TIMEZONE: UTC+7 (WIB)</div>
-            <div>STATUS: OPEN FOR SELECT COLLABORATIONS</div>
+            <div>STATUS: OPEN FOR SELECT COMMISSIONS</div>
           </div>
         </div>
       </div>

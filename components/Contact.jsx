@@ -13,7 +13,7 @@ export default function Contact() {
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".contact-headline-line",
+        ".contact-line",
         { yPercent: 100, opacity: 0 },
         {
           yPercent: 0,
@@ -24,21 +24,6 @@ export default function Contact() {
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 70%",
-          },
-        }
-      );
-
-      gsap.fromTo(
-        ".contact-cta-block",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 60%",
           },
         }
       );
@@ -57,32 +42,32 @@ export default function Contact() {
     <section
       id="contact"
       ref={containerRef}
-      className="relative py-32 md:py-48 px-6 md:px-12 max-w-7xl mx-auto border-t border-[rgba(17,17,16,0.08)]"
+      className="relative py-36 md:py-56 px-6 md:px-12 max-w-7xl mx-auto border-t border-[rgba(17,17,16,0.08)]"
     >
-      {/* Category Marker */}
-      <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#88857d] mb-16">
-        06 / INITIATE
+      <div className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#88857d] mb-20">
+        07 / INITIATE
       </div>
 
-      {/* Cinematic Conclusion Headline */}
-      <div className="mb-20 md:mb-32">
-        <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7.8rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
+      <div className="mb-24 md:mb-36">
+        <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
           <div className="overflow-hidden py-1">
-            <span className="contact-headline-line block">LET'S MAKE</span>
+            <span className="contact-line block">LET'S</span>
           </div>
           <div className="overflow-hidden py-1">
-            <span className="contact-headline-line block font-serif italic font-normal text-[#2a2926]">
+            <span className="contact-line block">MAKE</span>
+          </div>
+          <div className="overflow-hidden py-1">
+            <span className="contact-line block font-serif italic font-normal text-[#2a2926]">
               something
             </span>
           </div>
           <div className="overflow-hidden py-1">
-            <span className="contact-headline-line block text-[#111110]">GOOD.</span>
+            <span className="contact-line block text-[#111110]">GOOD.</span>
           </div>
         </h2>
       </div>
 
-      {/* Direct Contact CTA & Quick Actions */}
-      <div className="contact-cta-block grid grid-cols-1 md:grid-cols-12 gap-8 pt-12 border-t border-[rgba(17,17,16,0.08)] items-end">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-12 border-t border-[rgba(17,17,16,0.08)] items-end">
         <div className="md:col-span-7">
           <p className="text-base md:text-lg text-[#585650] leading-relaxed max-w-lg mb-6">
             Have a project, idea, or collaboration in mind? I am currently accepting select creative development and frontend engineering commissions.
