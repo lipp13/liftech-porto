@@ -12,8 +12,9 @@ export default function Hero() {
   const portraitImageRef = useRef(null);
   const eyebrowRef = useRef(null);
   const subtextRef = useRef(null);
+  const ctaGroupRef = useRef(null);
 
-  // Desktop subtle mouse tilt for 2.5D depth
+  // Desktop subtle mouse parallax (3-8px displacement)
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -50,12 +51,12 @@ export default function Hero() {
     };
   }, []);
 
-  // GSAP Choreographed Scroll Transformation
+  // GSAP Choreographed Entrance & Continuous 8-Stage Scroll Transformation
   useEffect(() => {
     registerGSAP();
 
     const ctx = gsap.context(() => {
-      // Entrance Timeline
+      // Entrance Sequence
       const enterTl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
       enterTl
@@ -82,6 +83,12 @@ export default function Hero() {
           0.8
         )
         .fromTo(
+          ctaGroupRef.current,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          0.95
+        )
+        .fromTo(
           portraitWrapperRef.current,
           { scale: 0.92, opacity: 0, clipPath: "inset(6% 6% 6% 6% round 24px)" },
           {
@@ -94,7 +101,7 @@ export default function Hero() {
           0.6
         );
 
-      // Scroll-Driven Transformation: Typography moves up, Portrait expands into depth
+      // Continuous 8-Stage Scroll Transformation
       const scrollTl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -105,20 +112,18 @@ export default function Hero() {
       });
 
       scrollTl
+        // 10% Headline begins moving upward
         .to(headlineRef.current, {
-          y: -120,
-          opacity: 0.2,
+          y: -140,
+          opacity: 0.15,
           ease: "none",
-        })
-        .to(
-          portraitWrapperRef.current,
-          {
-            scale: 1.06,
-            y: 40,
-            ease: "none",
-          },
-          0
-        );
+        }, 0)
+        // 25% - 75% Portrait scales & moves through depth
+        .to(portraitWrapperRef.current, {
+          scale: 1.08,
+          y: 60,
+          ease: "none",
+        }, 0);
     }, containerRef);
 
     return () => ctx.revert();
@@ -129,28 +134,33 @@ export default function Hero() {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section
       ref={containerRef}
       className="relative min-h-[105vh] flex flex-col justify-between pt-28 md:pt-36 pb-20 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
     >
-      {/* 3D Architectural Scene */}
+      {/* 3D Architectural Geometric Installation */}
       <DepthScene />
 
-      {/* Top Label */}
+      {/* Top Eyebrow */}
       <div className="relative z-10">
         <div
           ref={eyebrowRef}
           className="opacity-0 flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.25em] text-[#585650]"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#111110]" />
-          <span>CREATIVE DEVELOPER</span>
+          <span>CREATIVE DEVELOPER / DIGITAL EXPERIENCES</span>
         </div>
       </div>
 
-      {/* Main Massive Editorial Typography & 60-70% Dominant Visual Layout */}
+      {/* Massive Editorial Headline & Dominant 2.5D Portrait Installation */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center my-auto py-6">
-        {/* Left Column: Huge Typography */}
+        {/* Left Column: Typographic Monument */}
         <div ref={headlineRef} className="lg:col-span-6 flex flex-col justify-center">
           <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-medium tracking-[-0.045em] leading-[0.92] text-[#111110]">
             <div className="overflow-hidden py-1">
@@ -175,21 +185,35 @@ export default function Hero() {
             Crafting digital products where editorial design, fluid motion, and frontend engineering meet.
           </p>
 
-          <div className="mt-8">
+          <div
+            ref={ctaGroupRef}
+            className="opacity-0 flex items-center gap-8 mt-8 text-xs font-mono tracking-[0.2em] uppercase"
+          >
             <button
               onClick={scrollToWork}
               data-cursor-text="VIEW"
-              className="group inline-flex items-center gap-3 text-xs font-mono tracking-[0.2em] uppercase text-[#111110] hover:opacity-70 transition-opacity"
+              className="group inline-flex items-center gap-2 text-[#111110] hover:opacity-70 transition-opacity"
             >
-              <span>VIEW SELECTED WORK</span>
-              <span className="text-base group-hover:translate-x-1.5 transition-transform duration-300">
+              <span>EXPLORE WORK</span>
+              <span className="text-base group-hover:translate-y-0.5 transition-transform duration-300">
+                &darr;
+              </span>
+            </button>
+
+            <button
+              onClick={scrollToContact}
+              data-cursor-expand="true"
+              className="group inline-flex items-center gap-2 text-[#88857d] hover:text-[#111110] transition-colors"
+            >
+              <span>LET'S TALK</span>
+              <span className="text-base group-hover:translate-x-1 transition-transform duration-300">
                 &rarr;
               </span>
             </button>
           </div>
         </div>
 
-        {/* Right Column: Dominant 2.5D Portrait Art Installation (60-70% Viewport Area) */}
+        {/* Right Column: Signature 2.5D Portrait Art Installation (60-70% Viewport Area) */}
         <div className="lg:col-span-6 flex justify-center lg:justify-end">
           <div
             ref={portraitWrapperRef}

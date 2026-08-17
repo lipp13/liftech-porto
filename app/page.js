@@ -4,6 +4,7 @@ import CustomCursor from "@/components/CustomCursor";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
+import VisualManifesto from "@/components/VisualManifesto";
 import WhatIBuild from "@/components/WhatIBuild";
 import SelectedWork from "@/components/SelectedWork";
 import HorizontalShowcase from "@/components/HorizontalShowcase";
@@ -22,6 +23,7 @@ export default function Home() {
         <main className="relative z-10">
           <Hero />
           <Intro />
+          <VisualManifesto />
           <WhatIBuild />
           <SelectedWork />
           <HorizontalShowcase />
